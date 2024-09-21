@@ -1,0 +1,39 @@
+version: 0.5
+
+Documents_path: "/workspaces/legal-advisor-rag/data"
+
+Language: 'English'
+
+Weaviate:
+  ORG: "Law"
+  API_KEY: "IKordI2Uf8qcA0D21MAPVpwJjnhisUtQm3bE"
+  API_KEY_READ: "qnk89B1QPwG8hiI3pvpRkbk3rLFXDIjlU40N"
+  URL:  "https://sgf9zejs0ssy4pxtkbyng.c0.us-east1.gcp.weaviate.cloud"
+  load_locally: false    
+
+Create_node:
+  chunk_size: 512
+  chunk_overlap: 50
+
+Embedding_model: "bert-base-multilingual-cased"
+
+Retriever: 
+  alpha: 0.2
+  similarity_top_k: 10
+  similarity_threshold: 0.7
+
+RAG_model: 
+  model_name: "gpt-4o-mini"  # "claude-3-sonnet-20240229"
+  max_tokens: 1024
+  temperature: 0
+  threshold_reranker: 0.005
+  prompt_template: |
+    You're a legal advisor of Kyrgyz legislation. Without preamble, answer the QUESTION in {language} language based on the provided CONTEXT.
+    Use only the information from the CONTEXT when answering the QUESTION and not prior knowledge.
+    Provide short answers. Reffer in the answer to the name of the document from wich the context is extracted.
+    
+    QUESTION:
+    {question}
+    
+    CONTEXT:
+    {context}
