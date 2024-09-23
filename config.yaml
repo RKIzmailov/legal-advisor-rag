@@ -1,6 +1,6 @@
 version: 0.5
 
-Documents_path: "/workspaces/legal-advisor-rag/data"
+Documents_path: "../data/laws"
 
 Language: 'English'
 
@@ -15,7 +15,7 @@ Create_node:
   chunk_size: 512
   chunk_overlap: 50
 
-Embedding_model: "bert-base-multilingual-cased"
+Embedding_model: "sentence-transformers/distiluse-base-multilingual-cased-v2"
 
 Retriever: 
   alpha: 0.2
