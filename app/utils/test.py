@@ -1,7 +1,7 @@
 import pandas as pd
 import requests
 
-df = pd.read_csv("..\\..\\data\\ground_truth_data.csv")
+df = pd.read_csv("../../data/ground_truth_data.csv")
 question = df.sample(n=1).iloc[0]['question']
 print("question: ", question)
 

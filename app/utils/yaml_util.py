@@ -1,7 +1,6 @@
 import yaml
-import os
 
-config_path = '..\config.yaml'
+config_path = '..\\config.yaml'
 
 def load_config(yaml_file: str = config_path) -> dict:
     
@@ -13,6 +12,4 @@ def load_config(yaml_file: str = config_path) -> dict:
         config = yaml.safe_load(f.read())
         
     return config
-
-
 
