@@ -1,24 +1,29 @@
-import weaviate
-from weaviate.auth import AuthApiKey
+# import weaviate
+# from weaviate.auth import AuthApiKey
 from llama_index.core import StorageContext, VectorStoreIndex
 from llama_index.vector_stores.weaviate import WeaviateVectorStore
 from openai import OpenAI
 from anthropic import Anthropic
 
 import os
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
 from utils.yaml_util import load_config
+# from utils.rag_utils import download_embed_model
 
-load_dotenv()
-API_KEY = os.getenv("Weaviate_API_KEY_READ")
-weaviate_url = os.getenv("Weaviate_URL")
+
+# load_dotenv()
+# API_KEY = os.getenv("Weaviate_API_KEY_READ")
+# weaviate_url = os.getenv("Weaviate_URL")
 
 config = load_config()
 Org =  config['Weaviate']['ORG']
 
 
 def connect_index(weaviate_client):
+    if not weaviate_client:
+        raise ValueError("Weaviate client is not initialized.")
+    
     vector_store = WeaviateVectorStore(
         weaviate_client=weaviate_client,
         index_name=Org
@@ -29,18 +34,19 @@ def connect_index(weaviate_client):
     return index
 
 
-def load_weaviate():
-    weaviate_client = weaviate.connect_to_wcs(
-        cluster_url=weaviate_url,
-        auth_credentials=AuthApiKey(api_key=API_KEY)
-        )
-    print("Weaviate client connected:", weaviate_client.is_ready(), end = ' | ')
-    # try:
-    index = connect_index(weaviate_client=weaviate_client)
-    return index
-    # finally:
-    #     weaviate_client.close()
-    #     print("Weaviate client connection closed.")
+# def load_weaviate():
+#     download_embed_model()
+#     weaviate_client = weaviate.connect_to_wcs(
+#         cluster_url=weaviate_url,
+#         auth_credentials=AuthApiKey(api_key=API_KEY)
+#         )
+#     # try:
+#     print("Weaviate client connected:", weaviate_client.is_ready(), end = ' | ')
+#     index = connect_index(weaviate_client=weaviate_client)
+#     return index
+#     # finally:
+#     #     weaviate_client.close()
+#     #     print("Weaviate client connection closed.")
 
 
 def initialize_llm_client(model_name = "gpt-4o-mini"):

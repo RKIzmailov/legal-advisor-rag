@@ -12,4 +12,3 @@ def load_config(yaml_file: str = config_path) -> dict:
         config = yaml.safe_load(f.read())
         
     return config
-

@@ -1,8 +1,9 @@
 from llama_index.core.retrievers import VectorIndexRetriever
-
 import ingest
+
 from utils.yaml_util import load_config
-from utils.translator import ru
+from utils.rag_utils import ru
+from utils.weaviate_client import initialize_weaviate_client 
 
 config = load_config()
 Org = config['Weaviate']['ORG']
@@ -12,7 +13,8 @@ model_name = config['RAG_model']['model_name']
 llm_client = ingest.initialize_llm_client(model_name)
 print(f"Successfully initialized {model_name} LLM client.")
 
-index = ingest.load_weaviate()
+weaviate_client = initialize_weaviate_client()
+index = ingest.connect_index(weaviate_client = weaviate_client)
 print(f"Successfully weaviate index loaded.")
 
 retriever = VectorIndexRetriever(
@@ -24,7 +26,7 @@ retriever = VectorIndexRetriever(
     )
 
 
-def search_nodes(query):
+def search_nodes(query, retriever):
     return retriever.retrieve(query)
 
 
@@ -52,9 +54,13 @@ def llm_response(prompt):
 
 def rag(query):
     query = ru(query)
-    search_results = search_nodes(query)
+    search_results = search_nodes(query, retriever)
     prompt = build_prompt(query, search_results)
     answer = llm_response(prompt)
-    return answer
 
-print(rag('What evidence is required for a person to be formally charged as an accused?'))
+    answer_data = {
+        "answer": answer,
+    }
+    return answer_data
+
+# print(rag('What evidence is required for a person to be formally charged as an accused?'))

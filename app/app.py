@@ -1,12 +1,34 @@
 from flask import Flask, request, jsonify
 import uuid
+import signal
 import logging
 from rag import rag
+from utils.weaviate_client import initialize_weaviate_client, close_weaviate_client
 # import db
 
 app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 
+# Initialize Weaviate client globally
+# weaviate_client = None
+
+# @app.before_first_request
+# def setup_weaviate_client():
+#     global weaviate_client
+#     initialize_weaviate_client()
+#     print("Weaviate client initialize.")
+
+# @app.teardown_appcontext
+def teardown_weaviate_client(exception=None):
+    close_weaviate_client()
+    print("Weaviate client connection closed.")
+
+def signal_handler(sig, frame):
+    print("Received signal to terminate.")
+    teardown_weaviate_client()  # Вызываем функцию закрытия клиента
+    exit(0)  # Завершаем приложение
+
+signal.signal(signal.SIGINT, signal_handler)
 
 @app.route('/ask', methods=['POST'])
 def ask_question():
@@ -21,6 +43,7 @@ def ask_question():
     
     try:
         answer_data = rag(question)
+        print(f"Answer data: {answer_data}")    # Add this line to debug
         result = jsonify({
             'conversation_id': conversation_id,
             'question': question,
@@ -62,5 +85,7 @@ def submit_feedback():
 if __name__ == '__main__':
     try:
         app.run(debug=True, host="0.0.0.0", port=5000)
+        weaviate_client = None
+        weaviate_client = initialize_weaviate_client()
     except Exception as e:
         logging.error(f"Failed to start the Flask app: {str(e)}")

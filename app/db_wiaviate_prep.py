@@ -3,13 +3,13 @@ from dotenv import load_dotenv
 import re
 
 import weaviate
-from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-from llama_index.core import Settings
+
 from llama_index.core import SimpleDirectoryReader, StorageContext, VectorStoreIndex, Document
 from llama_index.vector_stores.weaviate import WeaviateVectorStore
 from transformers import BertTokenizer
 
 from utils.yaml_util import load_config
+from utils.weaviate_client import download_embed_model
 
 load_dotenv()
 API_KEY = os.getenv("Weaviate_API_KEY")
@@ -20,18 +20,22 @@ Org =  config['Weaviate']['ORG']
 documents_file_path = config['Documents_path']
 
 
-def download_embed_model():
-    embed_model_name = config.get('Embedding_model', 'sentence-transformers/distiluse-base-multilingual-cased-v2')
+download_embed_model()
 
-    if "sentence-transformers" not in embed_model_name:
-        print(f"Warning: The model {embed_model_name} is not a sentence-transformer model. Switching to a default.")
-        embed_model_name = 'sentence-transformers/distiluse-base-multilingual-cased-v2'
+# from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+# from llama_index.core import Settings
+# def download_embed_model():
+#     embed_model_name = config.get('Embedding_model', 'sentence-transformers/distiluse-base-multilingual-cased-v2')
 
-    embed_model = HuggingFaceEmbedding(model_name=embed_model_name)
+#     if "sentence-transformers" not in embed_model_name:
+#         print(f"Warning: The model {embed_model_name} is not a sentence-transformer model. Switching to a default.")
+#         embed_model_name = 'sentence-transformers/distiluse-base-multilingual-cased-v2'
 
-    Settings.embed_model = embed_model
+#     embed_model = HuggingFaceEmbedding(model_name=embed_model_name)
 
-    print(f"Using embedding model: {embed_model_name}")
+#     Settings.embed_model = embed_model
+
+#     print(f"Using embedding model: {embed_model_name}")
 
 
 def clear_weaviate():
