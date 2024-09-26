@@ -2,14 +2,12 @@ version: 0.5
 
 Documents_path: "../data/laws"
 
-Language: 'English'
+Language: "English"
+
+Timezone: "Asia/Bishkek"
 
 Weaviate:
   ORG: "Law"
-  API_KEY: "IKordI2Uf8qcA0D21MAPVpwJjnhisUtQm3bE"
-  API_KEY_READ: "qnk89B1QPwG8hiI3pvpRkbk3rLFXDIjlU40N"
-  URL:  "https://sgf9zejs0ssy4pxtkbyng.c0.us-east1.gcp.weaviate.cloud"
-  load_locally: false    
 
 Create_node:
   chunk_size: 512
@@ -18,8 +16,8 @@ Create_node:
 Embedding_model: "sentence-transformers/distiluse-base-multilingual-cased-v2"
 
 Retriever: 
-  alpha: 0.2
-  similarity_top_k: 10
+  alpha: 0.5
+  similarity_top_k: 5
   similarity_threshold: 0.7
 
 RAG_model: 
@@ -30,10 +28,10 @@ RAG_model:
   prompt_template: |
     You're a legal advisor of Kyrgyz legislation. Without preamble, answer the QUESTION in {language} language based on the provided CONTEXT.
     Use only the information from the CONTEXT when answering the QUESTION and not prior knowledge.
-    Provide short answers. Reffer in the answer to the name of the document from wich the context is extracted.
-    
+    Use only {language} language. Reffer in the answer to the article and the name of the document from wich the context is extracted, but translate them to the {language} language.
+
     QUESTION:
     {question}
-    
+
     CONTEXT:
     {context}

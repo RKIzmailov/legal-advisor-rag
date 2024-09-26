@@ -17,6 +17,8 @@ llama-index-embeddings-huggingface = "*"
 socks = "*"
 pysocks = "*"
 llama-index-postprocessor-colbert-rerank = "*"
+psycopg2 = "*"
+questionary = "*"
 
 [dev-packages]
 tqdm = "*"
