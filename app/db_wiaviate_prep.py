@@ -1,15 +1,14 @@
+import weaviate
+from weaviate.auth import AuthApiKey
+from llama_index.core import SimpleDirectoryReader, StorageContext, VectorStoreIndex, Document
+from llama_index.vector_stores.weaviate import WeaviateVectorStore
+from transformers import BertTokenizer
 import os
 from dotenv import load_dotenv
 import re
 
-import weaviate
-
-from llama_index.core import SimpleDirectoryReader, StorageContext, VectorStoreIndex, Document
-from llama_index.vector_stores.weaviate import WeaviateVectorStore
-from transformers import BertTokenizer
-
 from utils.yaml_util import load_config
-from utils.weaviate_client import download_embed_model
+from utils.weaviate_client import download_embed_model, close_weaviate_client
 
 load_dotenv()
 API_KEY = os.getenv("Weaviate_API_KEY")
@@ -20,24 +19,6 @@ Org =  config['Weaviate']['ORG']
 documents_file_path = config['Documents_path']
 
 
-download_embed_model()
-
-# from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-# from llama_index.core import Settings
-# def download_embed_model():
-#     embed_model_name = config.get('Embedding_model', 'sentence-transformers/distiluse-base-multilingual-cased-v2')
-
-#     if "sentence-transformers" not in embed_model_name:
-#         print(f"Warning: The model {embed_model_name} is not a sentence-transformer model. Switching to a default.")
-#         embed_model_name = 'sentence-transformers/distiluse-base-multilingual-cased-v2'
-
-#     embed_model = HuggingFaceEmbedding(model_name=embed_model_name)
-
-#     Settings.embed_model = embed_model
-
-#     print(f"Using embedding model: {embed_model_name}")
-
-
 def clear_weaviate():
     def get_weaviate_client(api_key, url):
         return weaviate.Client(
@@ -45,13 +26,12 @@ def clear_weaviate():
                 auth_client_secret=weaviate.AuthApiKey(api_key=api_key)
             )
 
-    # client
-    client = get_weaviate_client(API_KEY, weaviate_url)
 
-    print(f"Client exists: {client.is_ready()}")
+    weaviate_client = get_weaviate_client(API_KEY, weaviate_url)
+    print(f"Client exists: {weaviate_client.is_ready()}")
 
     # DELETING all info from DB
-    client.schema.delete_class(Org)
+    weaviate_client.schema.delete_class(Org)
 
 
 def upload_docs_to_weaviate():
@@ -150,16 +130,24 @@ def upload_docs_to_weaviate():
                 cluster_url=weaviate_url,
                 auth_credentials=weaviate.AuthApiKey(api_key=API_KEY)
     )
-    print("Weaviate client is ready:", client.is_ready())
+    print("*** Weaviate client is ready:", client.is_ready())
 
     documents = load_documents(documents_file_path)
-    nodes = create_nodes(documents)
+    print('*** The following documents uploaded:')
+    for doc in documents:
+        print('\t\t-', doc.metadata['file_name'].replace('.txt', ''))
 
+    print('*** Creating nodes...')
+    nodes = create_nodes(documents)
+    print('*** Creating nodes compleated.')
+
+    print('*** Inserting indexes to Weaviate...')
     index = connect_index(weaviate_client=client)
     insert_nodes_index(index, nodes=nodes)
+    print('*** Inserting indexes to Weaviate compleated.')
 
     client.close()
-    print("Weaviate client connection closed.")
+    print("***Weaviate client connection closed.")
     
 
 if __name__ == "__main__":
@@ -175,4 +163,4 @@ if __name__ == "__main__":
 
     print("Uploading docs to Weaviate DB...")
     upload_docs_to_weaviate()
-    print("Weaviate initialization and docs uploading completed successfully!")
+    print(f"Weaviate initialization and docs uploading completed successfully. Weaviate DB name: {Org}")
