@@ -64,19 +64,7 @@ The system queries a dataset containing Kyrgyz Republic’s key legal codes. The
 
     This information should also be added to the `.env` file.
 
-7. Ensure `pipenv` is installed (this step is redundant since it was covered in step 2, you may want to remove it):
-
-    ```bash
-    pip install pipenv
-    ```
-
-8. Install the app dependencies (redundant, as this was covered in step 3):
-
-    ```bash
-    pipenv install --dev
-    ```
-
-9. Activate the virtual environment:
+7. Activate the virtual environment:
 
     ```bash
     pipenv shell
