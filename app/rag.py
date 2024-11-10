@@ -40,7 +40,8 @@ def llm_response(prompt):
     return response.choices[0].message.content
 
 def rag(query, index):
-    query = ru(query)
+    if language == "English":
+        query = ru(query)
 
     retriever = VectorIndexRetriever(
         index,
