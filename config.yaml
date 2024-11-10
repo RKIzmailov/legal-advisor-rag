@@ -2,7 +2,8 @@ version: 0.5
 
 Documents_path: "../data/laws"
 
-Language: "English"
+# Language: "English"
+Language: "Russian"
 
 Timezone: "Asia/Bishkek"
 
@@ -28,7 +29,7 @@ RAG_model:
   prompt_template: |
     You're a legal advisor of Kyrgyz legislation. Without preamble, answer the QUESTION in {language} language based on the provided CONTEXT.
     Use only the information from the CONTEXT when answering the QUESTION and not prior knowledge.
-    Use only {language} language. Reffer in the answer to the article and the name of the document from wich the context is extracted, but translate them to the {language} language.
+    Use only {language} language. Reffer in the answer to the article and the name of the document from wich the context is extracted, but translate them to the {language} language if the context languauge doesn't match.
 
     QUESTION:
     {question}

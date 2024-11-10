@@ -88,6 +88,8 @@ Laws are situated in the `data/laws` folder. You can add other laws in .txt form
 
 You can adjust the language of responses by changing this parameter in the `config.yaml` file.
 
+Right now you can use English or Russian. Configure `config.yaml` file accordingly.
+
 
 ## 2.4. Running the Application
 
@@ -256,7 +258,7 @@ response = requests.post(url, json=data)
 print(response.json())
 ```
 
-If you run the `test.py` file, it will take the random question from `ground_truth_data.csv` and provide the answer.
+If you run the `test.py` file, it will take the random question in English from `ground_truth_data.csv` and provide the answer.
 
 ```bash
 python test.py
@@ -442,14 +444,6 @@ Here are the results:
 <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
     }
 </style>
 <table class="dataframe">

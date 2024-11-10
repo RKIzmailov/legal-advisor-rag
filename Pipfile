@@ -18,6 +18,7 @@ socks = "*"
 pysocks = "*"
 llama-index-postprocessor-colbert-rerank = "*"
 psycopg2 = "*"
+yandexfreetranslate = "*"
 questionary = "*"
 
 [dev-packages]
