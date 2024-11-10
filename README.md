@@ -440,6 +440,7 @@ The metric is `LLM-as-a-Judge` that evaluates the answer in terms of relevance t
 
 Here are the results:
 
+
 <div>
 <table class="dataframe">
   <thead>
@@ -516,3 +517,8 @@ Here are the results:
 
 
 The best result is provided by simple prompt, so I used it in the application.
+
+
+# 4. Next
+
+I work on creation AI Legal assistent in Kyrgyzstan. Please feel free to reach me out rkizmailov@gmail.com if you are interested in any forms of collaborations!
