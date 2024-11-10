@@ -441,11 +441,6 @@ The metric is `LLM-as-a-Judge` that evaluates the answer in terms of relevance t
 Here are the results:
 
 <div>
-  <style scoped>
-      .dataframe tbody tr th:only-of-type {
-          vertical-align: middle;
-      }
-  </style>
 <table class="dataframe">
   <thead>
     <tr style="text-align: right;">
