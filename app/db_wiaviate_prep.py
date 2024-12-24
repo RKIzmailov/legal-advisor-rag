@@ -17,6 +17,7 @@ weaviate_url = os.getenv("Weaviate_URL")
 config = load_config()
 Org =  config['Weaviate']['ORG']
 documents_file_path = config['Documents_path']
+# documents_file_path = r'D:\Rustem\2_Education\7_Data_science\4_DS_Projects_for_GH\7-legal-advisor-rag\data\laws'
 
 
 def clear_weaviate():
